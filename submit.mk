@@ -23,20 +23,20 @@ OBJ_PART2 := \
 	bmpReader.o
 
 
-%.o: %.c $(DEPS)
+%.o: %.c
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 all: $(TARGET_EXECUTABLES)
 
-$(TARGET_PART1): $(OBJ)
+$(TARGET_PART1): $(OBJ_PART1)
 	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
-$(TARGET_PART2): $(OBJ)
+$(TARGET_PART2): $(OBJ_PART2)
 	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 .PHONY: clean
 clean:
 	@echo Cleaning build files...
-	@rm -f *.o disposable persistent
+	@rm -f *.o $(TARGET_EXECUTABLES)
