@@ -5,7 +5,7 @@
  *       serial implementation
  */
 
-#include <stdbool>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 
@@ -34,11 +34,10 @@ int main()
    /*
     * Serial algorithm to multiply the matrix with its transpose
     */
-
    double A[MATRIX_DIM][MATRIX_DIM];
-   double C[MATRIX_DIM][MATRIX_DIM] = {{0}};    // static initialize to 0
+   static double C[MATRIX_DIM][MATRIX_DIM];    // static initialize to 0
 
-   InitMatrixToRandomValues(A, MATRIX_DIM, MATRIX_DIM);
+   InitMatrixToRandomValues(&A[0][0], MATRIX_DIM, MATRIX_DIM);
 
    for(int i = 0; i < MATRIX_DIM; i++)
       for(int j = 0; j < MATRIX_DIM; j++)
