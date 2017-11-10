@@ -59,5 +59,6 @@ package:
 
 
 test:
+	@mkdir -p Test
 	@cp Source/Part1/maxwell_griffin_lab4p1.cu Test/test.c
-	gcc Test/test.c -o test.out -Wall
+	gcc Test/test.c -o test.out -Wall -std=c99
