@@ -19,12 +19,8 @@ TARGET_EXECUTABLES := \
 SRCS := $(shell find $(SRC_DIR) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
-INC_DIRS := $(shell find $(SRC_DIR) -type d)
-INC_FLAGS := $(addprefix -I,$(INC_DIRS))
-
 CFLAGS := -O3
 CUDAFLAGS := -O
-CPPFLAGS := $(INC_FLAGS) -MMD -MP
 
 all: $(TARGET_EXECUTABLES)
 
