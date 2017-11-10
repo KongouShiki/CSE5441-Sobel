@@ -38,7 +38,7 @@ int main()
    double A[MATRIX_DIM][MATRIX_DIM];
    double C[MATRIX_DIM][MATRIX_DIM] = {{0}};    // static initialize to 0
 
-   InitMatrixToRandomValues(A);
+   InitMatrixToRandomValues(A, MATRIX_DIM, MATRIX_DIM);
 
    for(int i = 0; i < MATRIX_DIM; i++)
       for(int j = 0; j < MATRIX_DIM; j++)
