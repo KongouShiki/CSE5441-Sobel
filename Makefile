@@ -42,7 +42,7 @@ $(BUILD_DIR)/%.c.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 
-.PHONY: clean package
+.PHONY: clean package test
 
 clean:
 	@echo Cleaning build files...
@@ -56,3 +56,8 @@ package:
 	@cp Source/*.c Source/*.h Source/*/*.c Source/*/*.h cse5441_lab4
 	@cp submit.mk cse5441_lab4
 	@mv cse5441_lab4/submit.mk cse5441_lab4/Makefile
+
+
+test:
+	@cp Source/Part1/maxwell_griffin_lab4p1.cu Test/test.c
+	gcc Test/test.c -o test.out -Wall
