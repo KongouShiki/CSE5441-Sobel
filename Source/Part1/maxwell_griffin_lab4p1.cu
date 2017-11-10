@@ -43,7 +43,7 @@ int main()
    for(int i = 0; i < MATRIX_DIM; i++)
       for(int j = 0; j < MATRIX_DIM; j++)
          for(int k = 0; k < MATRIX_DIM; k++)
-            C[i][j] += A[k][i] * A[k][j]
+            C[i][j] += A[k][i] * A[k][j];
 
    return 0;
 }
