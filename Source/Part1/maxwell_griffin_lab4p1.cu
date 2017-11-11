@@ -11,7 +11,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define MATRIX_DIM 1024
+#define MATRIX_DIM (1024)
+#define THRESHOLD (0.00001)
+#define CUDA_GRIDS (1)
+#define CUDA_BLOCKS_PER_GRID (1)
+#define CUDA_THREADS_PER_BLOCK (1024)
 
 #define LINEARIZE(row, col, dim) \
    (((row) * (dim)) + (col))
@@ -55,7 +59,6 @@ void SerialMultiplyMatrixByTranspose(
          for(int k = 0; k < dim; k++)
             resultMatrix[LINEARIZE(i, j, dim)] += inputMatrix[LINEARIZE(k, i, dim)] * inputMatrix[LINEARIZE(k, j, dim)];
 }
-
 
 /*
  * Massively parallel CUDA kernel function that multiplies a matrix with its transpose.
@@ -102,8 +105,8 @@ void ParallelMultiplyMatrixByTranspose(
    int dim)
 {
    double *deviceInputMatrix, *deviceResultMatrix;
-   int numBlocks = 1;   // One block to start
-   int threadsPerBlock = 1024;
+   int numBlocks = CUDA_BLOCKS_PER_GRID;   // One block to start
+   int threadsPerBlock = CUDA_THREADS_PER_BLOCK;
    size_t matrixMemSize = dim * dim * sizeof(double);
 
    // Allocate device memory
@@ -122,6 +125,16 @@ void ParallelMultiplyMatrixByTranspose(
    cudaMemcpy(resultMatrix, deviceResultMatrix, matrixMemSize, cudaMemcpyDeviceToHost);
 }
 
+/*
+ * Compares the values of two arrays of doubles to within some threshold.
+ *
+ * @param first -- an array of doubles
+ * @param second -- another array of doubles
+ * @param size -- the size of the arrays
+ * @param theshold -- the maximum difference allowed between two values
+ * @return size_t -- 0 if the arrays are equal
+ *                   else where they first diverge, indexed at 1
+ */
 size_t CompareDoubleArrays(double *first, double *second, size_t size, double threshold)
 {
    for(size_t i = 0; i < size; i++)
@@ -135,29 +148,63 @@ size_t CompareDoubleArrays(double *first, double *second, size_t size, double th
    return 0;
 }
 
+/*
+ * Display all header information and matrix and CUDA parameters.
+ */
+void DisplayParameters()
+{
+   printf("********************************************************************************\n");
+   printf("lab4p1: serial vs. CUDA matrix multiplication.\n");
+   printf("Matrix dimensions: %dx%d\n", MATRIX_DIM, MATRIX_DIM);
+   printf("CUDA compute structure:\n");
+   printf("|-- with %d grid\n", CUDA_GRIDS);
+   printf("    |-- with %d blocks\n", CUDA_BLOCKS_PER_GRID);
+   printf("        |-- with %d threads per block\n", CUDA_THREADS_PER_BLOCK);
+   printf("\n");
+}
+
+/*
+ * Compare the two resulting matrices and display the results to the screen.
+ *
+ * @param serial -- serial results matrix
+ * @param parallel -- parallel  results matrix
+ * @param dim -- row/col size of the matrices
+ */
+void DisplayResults(double *serial, double *parallel, int dim)
+{
+   printf("Checking that the two resulting matrices are equivalent.\n");
+   size_t differ = CompareDoubleArrays(serial, parallel, dim * dim, THRESHOLD);
+   if(0 == differ)
+   {
+      printf("The two resulting matrices are equivalent within %.5lf!\n", THRESHOLD);
+   }
+   else
+   {
+      size_t badRow = (differ - 1) / dim;
+      size_t badCol = (differ - 1) % dim;
+      printf("The resulting matrices do not match!\n");
+      printf("The first non-matching values occur at (%d, %d).\n", badRow, badCol);
+      printf("|-- Serial[%d][%d] = %d\n", badRow, badCol, serial[differ-1]);
+      printf("|-- Parallel[%d][%d] = %d\n", badRow, badCol, parallel[differ-1]);
+   }
+}
+
 int main()
 {
    double A[MATRIX_DIM][MATRIX_DIM];
    static double C_serial[MATRIX_DIM][MATRIX_DIM], C_parallel[MATRIX_DIM][MATRIX_DIM];    // static initialize to 0
 
    InitMatrixToRandomValues(&A[0][0], MATRIX_DIM, MATRIX_DIM);
-   
+
+   DisplayParameters();
+
    printf("Performing Serial matrix multiply.\n");
    SerialMultiplyMatrixByTranspose(&A[0][0], &C_serial[0][0], MATRIX_DIM);
 
    printf("Performing Parallel matrix multiply.\n");
    ParallelMultiplyMatrixByTranspose(&A[0][0], &C_parallel[0][0], MATRIX_DIM);
 
-   printf("Checking that the two resulting matrices are the same.\n");
-   if(0 == CompareDoubleArrays(&C_serial[0][0], &C_parallel[0][0], MATRIX_DIM * MATRIX_DIM, 0.00001))
-   {
-      printf("The two resulting matrices are the same within 0.00001.\n");
-   }
-   else
-   {
-      printf("The resulting matrices do not match!\n");
-      printf("serial = %lf, parallel = %lf", C_serial[500][500], C_parallel[500][500]);
-   }
+   DisplayResults(&C_serial[0][0], &C_parallel[0][0], MATRIX_DIM);
 
    return 0;
 }
