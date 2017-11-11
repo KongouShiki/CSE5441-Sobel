@@ -25,9 +25,8 @@ CUDAFLAGS := -O
 all: $(TARGET_EXECUTABLES)
 
 $(TARGET_PART1): $(OBJS)
-	$(CUDA) $(CUDAFLAGS) -o $(BUILD_DIR)/Part1/maxwell_griffin_$@.o $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
-	$(CC) -o $@ $(BUILD_DIR)/Part1/maxwell_griffin_$@.o $(OBJS)
-
+	$(CUDA) $(CUDAFLAGS) -o $@ $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
+	
 $(TARGET_PART2): $(OBJS)
 	$(CUDA) $(CUDAFLAGS) -o $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(SRC_PART2_DIR)/maxwell_griffin_$(TARGET_PART2).cu
 	$(CC) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o bmpReader.o $(OBJS)

@@ -122,24 +122,41 @@ void ParallelMultiplyMatrixByTranspose(
    cudaMemcpy(resultMatrix, deviceResultMatrix, matrixMemSize, cudaMemcpyDeviceToHost);
 }
 
+size_t CompareDoubleArrays(double *first, double *second, size_t size, double threshold)
+{
+   for(size_t i = 0; i < size; i++)
+   {
+      double diff = first[i] - second[i];
+      if((diff > 0 && diff > threshold) || (diff < 0 && diff < (threshold * -1)))
+      {
+         return i+1;
+      }
+   }
+   return 0;
+}
+
 int main()
 {
-   double A_serial[MATRIX_DIM][MATRIX_DIM], A_parallel[MATRIX_DIM][MATRIX_DIM];
+   double A[MATRIX_DIM][MATRIX_DIM];
    static double C_serial[MATRIX_DIM][MATRIX_DIM], C_parallel[MATRIX_DIM][MATRIX_DIM];    // static initialize to 0
 
-   InitMatrixToRandomValues(&A_serial[0][0], MATRIX_DIM, MATRIX_DIM);
-   SerialMultiplyMatrixByTranspose(A_serial, C_serial, MATRIX_DIM);
+   InitMatrixToRandomValues(&A[0][0], MATRIX_DIM, MATRIX_DIM);
+   
+   printf("Performing Serial matrix multiply.\n");
+   SerialMultiplyMatrixByTranspose(&A[0][0], &C_serial[0][0], MATRIX_DIM);
 
-   InitMatrixToRandomValues(&A_parallel[0][0], MATRIX_DIM, MATRIX_DIM);
-   ParallelMultiplyMatrixByTranspose(A_parallel, C_parallel, MATRIX_DIM);
+   printf("Performing Parallel matrix multiply.\n");
+   ParallelMultiplyMatrixByTranspose(&A[0][0], &C_parallel[0][0], MATRIX_DIM);
 
-   if(0 == memcmp(C_serial, C_parallel, MATRIX_DIM * MATRIX_DIM * sizeof(double)))
+   printf("Checking that the two resulting matrices are the same.\n");
+   if(0 == CompareDoubleArrays(&C_serial[0][0], &C_parallel[0][0], MATRIX_DIM * MATRIX_DIM, 0.00001))
    {
-      printf("The two resulting matrices are the same.\n");
+      printf("The two resulting matrices are the same within 0.00001.\n");
    }
    else
    {
       printf("The resulting matrices do not match!\n");
+      printf("serial = %lf, parallel = %lf", C_serial[500][500], C_parallel[500][500]);
    }
 
    return 0;
