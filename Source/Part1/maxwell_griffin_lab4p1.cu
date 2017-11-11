@@ -13,12 +13,23 @@
 
 #define MATRIX_DIM (1024)
 #define THRESHOLD (0.00001)
+
 #define CUDA_GRIDS (1)
 #define CUDA_BLOCKS_PER_GRID (1)
 #define CUDA_THREADS_PER_BLOCK (1024)
 
+#define MS_PER_SEC (1000)
+#define NS_PER_MS (1000 * 1000)
+#define NS_PER_SEC (NS_PER_MS * MS_PER_SEC)
+
 #define LINEARIZE(row, col, dim) \
    (((row) * (dim)) + (col))
+
+// Timing structs
+static struct timespec rtcSerialStart;
+static struct timespec rtcSerialEnd;
+static struct timespec rtcParallelStart;
+static struct timespec rtcPArallelEnd;
 
 /*
  * Sets values in an x by y matrix to random values between 1.0 and 2.0
@@ -187,8 +198,23 @@ void DisplayResults(double *serial, double *parallel, int dim)
       printf("|-- Serial[%d][%d] = %d\n", badRow, badCol, serial[differ-1]);
       printf("|-- Parallel[%d][%d] = %d\n", badRow, badCol, parallel[differ-1]);
    }
+
+   printf("\n");
+   printf("Timing results:\n");
+   printf("|-- The serial algorithm took %9.4ld seconds\n",
+      (LINEARIZE(rtcSerialEnd.tv_sec, rtcSerialEnd.tv_nsec, NS_PER_SEC)
+      - LINEARIZE(rtcSerialStart.tv_sec, rtcSerialStart.tv_nsec, NS_PER_SEC))
+      / ((double)NS_PER_SEC));
+
+   printf("|-- The parallel algorithm took %9.4ld seconds\n",
+      (LINEARIZE(rtcParallelEnd.tv_sec, rtcParallelEnd.tv_nsec, NS_PER_SEC)
+      - LINEARIZE(rtcParallelStart.tv_sec, rtcParallelStart.tv_nsec, NS_PER_SEC))
+      / ((double)NS_PER_SEC));
 }
 
+/*
+ * Main function.
+ */
 int main()
 {
    double A[MATRIX_DIM][MATRIX_DIM];
@@ -199,10 +225,14 @@ int main()
    DisplayParameters();
 
    printf("Performing Serial matrix multiply.\n");
+   clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
    SerialMultiplyMatrixByTranspose(&A[0][0], &C_serial[0][0], MATRIX_DIM);
+   clock_gettime(CLOCK_REALTIME, &rtcSerialEnd);
 
    printf("Performing Parallel matrix multiply.\n");
+   clock_gettime(CLOCK_REALTIME, &rtcParallelStart);
    ParallelMultiplyMatrixByTranspose(&A[0][0], &C_parallel[0][0], MATRIX_DIM);
+   clock_gettime(CLOCK_REALTIME, &rtcParallelEnd);
 
    DisplayResults(&C_serial[0][0], &C_parallel[0][0], MATRIX_DIM);
 
