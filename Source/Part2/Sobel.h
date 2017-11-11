@@ -5,9 +5,11 @@
 #ifndef SOBEL_H
 #define SOBEL_H
 
+#include "Stencil.h"
 /*
- * Calculates the magnitude of the gradient of the 3x3 stencil of image values
+ * Calculates the magnitude of the gradient of the stencil of image values
+ * @param stencil -- the 3x3 image stencil
  */
-double Sobel_Magnitude(double stencil[3][3]);
+double Sobel_Magnitude(Stencil_t *stencil);
 
 #endif
