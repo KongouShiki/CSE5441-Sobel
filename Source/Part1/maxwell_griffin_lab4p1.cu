@@ -29,7 +29,7 @@
 static struct timespec rtcSerialStart;
 static struct timespec rtcSerialEnd;
 static struct timespec rtcParallelStart;
-static struct timespec rtcPArallelEnd;
+static struct timespec rtcParallelEnd;
 
 /*
  * Sets values in an x by y matrix to random values between 1.0 and 2.0
