@@ -15,7 +15,7 @@
 #define THRESHOLD (0.00001)
 
 #define CUDA_GRIDS (1)
-#define CUDA_BLOCKS_PER_GRID (1)
+#define CUDA_BLOCKS_PER_GRID (1024)
 #define CUDA_THREADS_PER_BLOCK (1024)
 
 #define MS_PER_SEC (1000)
@@ -89,8 +89,7 @@ __global__ void cudaMultiplyMatrixByTranspose(
    int k;               // Row of input  and row of transpose
    double sum = 0;
 
-
-   for(j = 0; j < dim; j++)
+   for(j = blockIdx.x; j < dim; j += gridDim.x)
    {
       sum = 0;
       for(k = 0; k < dim; k++)
@@ -116,7 +115,7 @@ void ParallelMultiplyMatrixByTranspose(
    int dim)
 {
    double *deviceInputMatrix, *deviceResultMatrix;
-   int numBlocks = CUDA_BLOCKS_PER_GRID;   // One block to start
+   int numBlocks = CUDA_BLOCKS_PER_GRID;
    int threadsPerBlock = CUDA_THREADS_PER_BLOCK;
    size_t matrixMemSize = dim * dim * sizeof(double);
 
@@ -166,6 +165,7 @@ void DisplayParameters()
 {
    printf("********************************************************************************\n");
    printf("lab4p1: serial vs. CUDA matrix multiplication.\n");
+   printf("\n");
    printf("Matrix dimensions: %dx%d\n", MATRIX_DIM, MATRIX_DIM);
    printf("CUDA compute structure:\n");
    printf("|-- with %d grid\n", CUDA_GRIDS);
@@ -187,7 +187,7 @@ void DisplayResults(double *serial, double *parallel, int dim)
    size_t differ = CompareDoubleArrays(serial, parallel, dim * dim, THRESHOLD);
    if(0 == differ)
    {
-      printf("The two resulting matrices are equivalent within %.5lf!\n", THRESHOLD);
+      printf("The two resulting matrices are equivalent!\n", THRESHOLD);
    }
    else
    {
@@ -201,12 +201,12 @@ void DisplayResults(double *serial, double *parallel, int dim)
 
    printf("\n");
    printf("Timing results:\n");
-   printf("|-- The serial algorithm took %9.4ld seconds\n",
+   printf("|-- The serial algorithm took %9.4lf seconds\n",
       (LINEARIZE(rtcSerialEnd.tv_sec, rtcSerialEnd.tv_nsec, NS_PER_SEC)
       - LINEARIZE(rtcSerialStart.tv_sec, rtcSerialStart.tv_nsec, NS_PER_SEC))
       / ((double)NS_PER_SEC));
 
-   printf("|-- The parallel algorithm took %9.4ld seconds\n",
+   printf("|-- The parallel algorithm took %9.4lf seconds\n",
       (LINEARIZE(rtcParallelEnd.tv_sec, rtcParallelEnd.tv_nsec, NS_PER_SEC)
       - LINEARIZE(rtcParallelStart.tv_sec, rtcParallelStart.tv_nsec, NS_PER_SEC))
       / ((double)NS_PER_SEC));
@@ -224,12 +224,12 @@ int main()
 
    DisplayParameters();
 
-   printf("Performing Serial matrix multiply.\n");
+   printf("Performing serial matrix multiplication.\n");
    clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
    SerialMultiplyMatrixByTranspose(&A[0][0], &C_serial[0][0], MATRIX_DIM);
    clock_gettime(CLOCK_REALTIME, &rtcSerialEnd);
 
-   printf("Performing Parallel matrix multiply.\n");
+   printf("Performing parallel matrix multiplication.\n");
    clock_gettime(CLOCK_REALTIME, &rtcParallelStart);
    ParallelMultiplyMatrixByTranspose(&A[0][0], &C_parallel[0][0], MATRIX_DIM);
    clock_gettime(CLOCK_REALTIME, &rtcParallelEnd);
