@@ -17,7 +17,7 @@ TARGET_EXECUTABLES := \
 	$(TARGET_PART2) \
 
 OBJS := \
-	bmpReader.o \
+	$(SRC_PART2_DIR)bmpReader.o \
 
 all: $(TARGET_EXECUTABLES)
 
