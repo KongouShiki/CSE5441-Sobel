@@ -29,8 +29,7 @@ OBJ_PART2 := \
 all: $(TARGET_EXECUTABLES)
 
 $(TARGET_PART1): $(OBJ_PART1)
-	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.cu $(CUDAFLAGS)
 
 $(TARGET_PART2): $(OBJ_PART2)
 	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
