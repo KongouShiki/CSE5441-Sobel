@@ -10,7 +10,7 @@ static const double Gx_data[3][3] = {
    { -2, 0, 2 },
    { -1, 0, 1 }
 };
-static const Stencil_t Gx = {
+static Stencil_t Gx = {
    .top = Gx_data[0],
    .middle = Gx_data[1],
    .bottom = Gx_data[2]
@@ -21,7 +21,7 @@ static const double Gy_data[3][3] = {
    {  0,  0,  2 },
    { -1, -2, -1 }
 };
-static const Stencil_t Gy = {
+static Stencil_t Gy = {
    .top = Gy_data[0],
    .middle = Gy_data[1],
    .bottom = Gy_data[2]

@@ -5,7 +5,7 @@
  */
 
  #include <stdio.h>
- #include <Sobel.h>
+ #include "Sobel.h"
 
  /*
   * Main function.
