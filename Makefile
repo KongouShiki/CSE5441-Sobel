@@ -30,12 +30,12 @@ $(TARGET_PART1): $(OBJS)
 $(TARGET_PART2): $(OBJS)
 	@mkdir -p $(BUILD_DIR)/$(SRC_PART2_DIR)
 	$(CUDA) $(CUDAFLAGS) -c $(SRC_PART2_DIR)/maxwell_griffin_$@.cu -o $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
-	$(CUDA) -o $@ $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o $(OBJS)
+	$(CUDA) $(CUDAFLAGS) -o $@ $(OBJS) $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
-	$(CUDA) $(CFLAGS) -c $< -o $@
+	$(CUDA) $(CUDAFLAGS) -c $< -o $@
 
 
 .PHONY: clean package test

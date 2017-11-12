@@ -2,7 +2,7 @@
 CC := gcc
 CUDA := nvcc
 CFLAGS := -O3
-CUDAFLAGS := -O
+CUDAFLAGS := -O -Wno-deprecated-gpu-targets
 
 # Paths
 BUILD_DIR := Build
@@ -20,11 +20,8 @@ OBJ_PART1 := \
 
 
 OBJ_PART2 := \
-	bmpReader.o
+	Sobel.o
 
-
-%.o: %.c
-	$(CC) -c -o $@ $< $(CFLAGS)
 
 all: $(TARGET_EXECUTABLES)
 
@@ -33,7 +30,10 @@ $(TARGET_PART1): $(OBJ_PART1)
 
 $(TARGET_PART2): $(OBJ_PART2)
 	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.o $^ $(CUDAFLAGS)
+
+%.o: %.c
+	$(CUDA) -c -o $@ $< $(CUDAFLAGS)
 
 .PHONY: clean
 clean:
