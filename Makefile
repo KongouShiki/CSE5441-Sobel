@@ -30,7 +30,7 @@ $(TARGET_PART1): $(OBJS)
 $(TARGET_PART2): $(OBJS)
 	mkdir -p $(BUILD_DIR)
 	$(CUDA) $(CUDAFLAGS) -c $(SRC_PART2_DIR)/maxwell_griffin_$@.cu -o $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
-	$(CUDA) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(OBJS)
+	$(CUDA) -o $@ $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o $(OBJS)
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
