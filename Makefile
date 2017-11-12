@@ -20,7 +20,7 @@ SRCS := $(shell find $(SRC_DIR) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
 
 CFLAGS := -O3
-CUDAFLAGS := -O
+CUDAFLAGS := -O -Wno-deprecated-gpu-targets
 
 all: $(TARGET_EXECUTABLES)
 
@@ -28,7 +28,7 @@ $(TARGET_PART1): $(OBJS)
 	$(CUDA) $(CUDAFLAGS) -o $@ $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
 
 $(TARGET_PART2): $(OBJS)
-	mkdir -p $(BUILD_DIR)
+	@mkdir -p $(BUILD_DIR)/$(SRC_PART2_DIR)
 	$(CUDA) $(CUDAFLAGS) -c $(SRC_PART2_DIR)/maxwell_griffin_$@.cu -o $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
 	$(CUDA) -o $@ $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o $(OBJS)
 

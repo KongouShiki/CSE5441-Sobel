@@ -20,5 +20,5 @@
 
     double result = Sobel_Magnitude(&stencil);
 
-    printf("The result of the edge detection is %lf", result);
+    printf("The result of the edge detection is %lf\n", result);
  }
