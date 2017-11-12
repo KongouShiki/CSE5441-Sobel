@@ -5,7 +5,7 @@
 #include <math.h>
 #include "Sobel.h"
 
-static const double Gx_data[3][3] = {
+static double Gx_data[3][3] = {
    { -1, 0, 1 },
    { -2, 0, 2 },
    { -1, 0, 1 }
@@ -16,7 +16,7 @@ static Stencil_t Gx = {
    .bottom = Gx_data[2]
 };
 
-static const double Gy_data[3][3] = {
+static double Gy_data[3][3] = {
    {  1,  2,  1 },
    {  0,  0,  2 },
    { -1, -2, -1 }
