@@ -18,7 +18,7 @@
     stencil.middle = x[1];
     stencil.bottom = x[2];
 
-    double result = Sobel_Magnitude(stencil);
+    double result = Sobel_Magnitude(&stencil);
 
     printf("The result of the edge detection is %lf", result);
  }
