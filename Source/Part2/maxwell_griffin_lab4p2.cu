@@ -84,16 +84,24 @@ double SobelPixelMagnitude(Stencil_t *stencil)
 
 /*
  * Display all header information and matrix and CUDA parameters.
+ *
+ * @param inputFile -- name of the input image
+ * @param serialOutputFile -- name of the serial output image
+ * @param parallelOutputFile -- name of the parallel output image
+ * @param imageHeight -- in pixels
+ * @param imageWidth -- in pixels
  */
 void DisplayParameters(
    char *inputFile,
    char *serialOutputFile,
-   char *cudaOutputFile)
+   char *cudaOutputFile,
+   int imageHeight,
+   int imageWidth
 {
    printf("********************************************************************************\n");
    printf("lab4p2: serial vs. CUDA Sobel edge detection.\n");
    printf("\n");
-   printf("Input image: %s \t(Height: %d pixels, width: %d pixels)\n");
+   printf("Input image: %s \t(Height: %d pixels, width: %d pixels)\n", inputFile, );
    printf("Serial output image: \t%s\n", serialOutputFile);
    printf("CUDA output image: \t%s\n", cudaOutputFile);
    printf("\n");
@@ -182,10 +190,10 @@ int main(int argc, char* argv[])
 
    // Read in input image and allocate space for new output image buffers
    uint8_t *inputImage = (uint8_t *)read_bmp_file(inputFile);
-	uint8_t *serialOutputImage = (uint8_t *)malloc(get_num_pixel());
-	uint8_t *cudaOutputImage = (uint8_t *)malloc(get_num_pixel());
+   uint8_t *serialOutputImage = (uint8_t *)malloc(get_num_pixel());
+   uint8_t *cudaOutputImage = (uint8_t *)malloc(get_num_pixel());
 
-   DisplayParameters(argv[1], argv[2], argv[3]);
+   DisplayParameters(argv[1], argv[2], argv[3], 11, 12);
 
    printf("Performing serial Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
