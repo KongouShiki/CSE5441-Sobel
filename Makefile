@@ -26,15 +26,16 @@ all: $(TARGET_EXECUTABLES)
 
 $(TARGET_PART1): $(OBJS)
 	$(CUDA) $(CUDAFLAGS) -o $@ $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
-	
+
 $(TARGET_PART2): $(OBJS)
-	$(CUDA) $(CUDAFLAGS) -o $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(SRC_PART2_DIR)/maxwell_griffin_$(TARGET_PART2).cu
-	$(CC) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o bmpReader.o $(OBJS)
+	$(MKDIR_P) $(dir $@)
+	$(CUDA) $(CUDAFLAGS) -c $(SRC_PART2_DIR)/maxwell_griffin_$@.cu -o $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
+	$(CUDA) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(OBJS)
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
 	$(MKDIR_P) $(dir $@)
-	$(CC) $(CFLAGS) -c $< -o $@
+	$(CUDA) $(CFLAGS) -c $< -o $@
 
 
 .PHONY: clean package test
