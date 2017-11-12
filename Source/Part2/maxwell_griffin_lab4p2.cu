@@ -93,8 +93,7 @@ void DisplayParameters(
    printf("********************************************************************************\n");
    printf("lab4p2: serial vs. CUDA Sobel edge detection.\n");
    printf("\n");
-   printf("Input image: \t\t\t\t%s\n", inputFile);
-   printf("\t\tHeight: %d pixles\t\tWidth: %d pixels\n");
+   printf("Input image: %s \t(Height: %d pixels, width: %d pixels)\n");
    printf("Serial output image: \t%s\n", serialOutputFile);
    printf("CUDA output image: \t%s\n", cudaOutputFile);
    printf("\n");
@@ -168,8 +167,7 @@ int main(int argc, char* argv[])
    // Check for correct number of comand line args
    if (argc != 4)
    {
-      printf("Error: Incorrect arguments.\n");
-      printf("Should be: <input.bmp> <serial_output.bmp> <cuda_output.bmp>\n");
+      printf("Error: Incorrect arguments: <input.bmp> <serial_output.bmp> <cuda_output.bmp>\n");
       return 0;
    }
 
