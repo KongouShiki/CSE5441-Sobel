@@ -25,9 +25,8 @@ CUDAFLAGS := -O
 all: $(TARGET_EXECUTABLES)
 
 $(TARGET_PART1): $(OBJS)
-	$(CUDA) $(CUDAFLAGS) -o $(BUILD_DIR)/Part1/maxwell_griffin_$@.o $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
-	$(CC) -o $@ $(BUILD_DIR)/Part1/maxwell_griffin_$@.o $(OBJS)
-
+	$(CUDA) $(CUDAFLAGS) -o $@ $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
+	
 $(TARGET_PART2): $(OBJS)
 	$(CUDA) $(CUDAFLAGS) -o $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(SRC_PART2_DIR)/maxwell_griffin_$(TARGET_PART2).cu
 	$(CC) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o bmpReader.o $(OBJS)
@@ -49,12 +48,9 @@ clean:
 package:
 	@echo "Packaging up project for submission..."
 	@mkdir -p cse5441_lab4
-	@cp Source/*.c Source/*.h Source/*/*.c Source/*/*.h cse5441_lab4
+	@cp $(SRC_PART1_DIR)/*.cu cse5441_lab4
+	# @cp $(SRC_PART2_DIR)/*.c cse5441_lab4
+	# @cp $(SRC_PART2_DIR)/*.h cse5441_lab4
+	# @cp $(SRC_PART2_DIR)/*.cu cse5441_lab4
 	@cp submit.mk cse5441_lab4
 	@mv cse5441_lab4/submit.mk cse5441_lab4/Makefile
-
-
-test:
-	@mkdir -p Test
-	@cp Source/Part1/maxwell_griffin_lab4p1.cu Test/test.c
-	gcc Test/test.c -o test.out -Wall -std=c99
