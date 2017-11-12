@@ -21,7 +21,7 @@ $(TARGET_PART1):
 
 $(TARGET_PART2):
 	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CUDA) -o $@ maxwell_griffin_$@.o $^ $(CUDAFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.o bmpReader.o $^ $(CUDAFLAGS)
 
 .PHONY: clean
 clean:

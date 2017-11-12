@@ -17,7 +17,7 @@ TARGET_EXECUTABLES := \
 	$(TARGET_PART2) \
 
 OBJS := \
-
+	bmpReader.o \
 
 all: $(TARGET_EXECUTABLES)
 
@@ -40,7 +40,8 @@ package:
 	@echo "Packaging up project for submission..."
 	@mkdir -p cse5441_lab4
 	@cp $(SRC_PART1_DIR)/*.cu cse5441_lab4
-	@cp $(SRC_PART2_DIR)/*.h cse5441_lab4
 	@cp $(SRC_PART2_DIR)/*.cu cse5441_lab4
+	@cp $(SRC_PART2_DIR)/*.h cse5441_lab4
+	@cp $(SRC_PART2_DIR)/*.o cse5441_lab4
 	@cp submit.mk cse5441_lab4
 	@mv cse5441_lab4/submit.mk cse5441_lab4/Makefile

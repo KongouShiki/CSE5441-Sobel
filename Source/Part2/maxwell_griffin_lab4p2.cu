@@ -4,10 +4,10 @@
  *       serial algorithm, and once by a massively parallel CUDA algorithm.
  */
 
-#include <stdint.h>
 #include <stdio.h>
 #include <math.h>
 #include "Stencil.h"
+#include "read_bmp.h"
 
 #define LINEARIZE(row, col, dim) \
    (((row) * (dim)) + (col))
@@ -89,7 +89,7 @@ int main(int argc, char* argv[])
    }
 
    // Read in input image and allocate space for new output image buffers
-   uint8_t *inputImage = (uint8_t *)read_bmp_file(inFile);
+   uint8_t *inputImage = (uint8_t *)read_bmp_file(inputFile);
 	uint8_t *serialOutputImage = (uint8_t *)malloc(get_num_pixel());
 	uint8_t *cudaOutputImage = (uint8_t *)malloc(get_num_pixel());
 
