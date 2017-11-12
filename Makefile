@@ -18,6 +18,7 @@ TARGET_EXECUTABLES := \
 # File lists
 SRCS := $(shell find $(SRC_DIR) -name *.c)
 OBJS := $(SRCS:%=$(BUILD_DIR)/%.o)
+DEPS := $(OBJS:.o=.d)
 
 CFLAGS := -O3
 CUDAFLAGS := -O -Wno-deprecated-gpu-targets
@@ -50,8 +51,10 @@ package:
 	@echo "Packaging up project for submission..."
 	@mkdir -p cse5441_lab4
 	@cp $(SRC_PART1_DIR)/*.cu cse5441_lab4
-	# @cp $(SRC_PART2_DIR)/*.c cse5441_lab4
-	# @cp $(SRC_PART2_DIR)/*.h cse5441_lab4
-	# @cp $(SRC_PART2_DIR)/*.cu cse5441_lab4
+	@cp $(SRC_PART2_DIR)/*.c cse5441_lab4
+	@cp $(SRC_PART2_DIR)/*.h cse5441_lab4
+	@cp $(SRC_PART2_DIR)/*.cu cse5441_lab4
 	@cp submit.mk cse5441_lab4
 	@mv cse5441_lab4/submit.mk cse5441_lab4/Makefile
+
+	-include $(DEPS)
