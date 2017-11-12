@@ -155,7 +155,7 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output)
  * @param output -- output pixel buffer
  * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
-int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output)
+int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output)
 {
    return 20;
 }
@@ -191,12 +191,12 @@ int main(int argc, char* argv[])
 
    printf("Performing serial Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
-   int serialConvergenceThreshold = SerialSobelEdgeDetection();
+   int serialConvergenceThreshold = SerialSobelEdgeDetection(inputImage, serialOutputImage);
    clock_gettime(CLOCK_REALTIME, &rtcSerialEnd);
 
    printf("Performing CUDA parallel Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcParallelStart);
-   int parallelConvergenceThreshold = ParallelSobelEdgeDetection();
+   int parallelConvergenceThreshold = ParallelSobelEdgeDetection(inputImage, parallelOutputImage);
    clock_gettime(CLOCK_REALTIME, &rtcParallelEnd);
 
    DisplayResults(serialConvergenceThreshold, parallelConvergenceThreshold);
