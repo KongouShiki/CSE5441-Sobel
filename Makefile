@@ -28,13 +28,13 @@ $(TARGET_PART1): $(OBJS)
 	$(CUDA) $(CUDAFLAGS) -o $@ $(SRC_PART1_DIR)/maxwell_griffin_$@.cu
 
 $(TARGET_PART2): $(OBJS)
-	$(MKDIR_P) $(dir $@)
+	mkdir -p $(dir $@)
 	$(CUDA) $(CUDAFLAGS) -c $(SRC_PART2_DIR)/maxwell_griffin_$@.cu -o $(BUILD_DIR)/$(SRC_PART2_DIR)/maxwell_griffin_$@.o
 	$(CUDA) -o $@ $(BUILD_DIR)/Part2/maxwell_griffin_$(TARGET_PART2).o $(OBJS)
 
 # c source
 $(BUILD_DIR)/%.c.o: %.c
-	$(MKDIR_P) $(dir $@)
+	mkdir -p $(dir $@)
 	$(CUDA) $(CFLAGS) -c $< -o $@
 
 
@@ -42,7 +42,7 @@ $(BUILD_DIR)/%.c.o: %.c
 
 clean:
 	@echo Cleaning build files...
-	@$(RM) -r $(BUILD_DIR)
+	@$(RM) -rf $(BUILD_DIR)
 	@$(RM) $(TARGET_PART1)
 	@$(RM) $(TARGET_PART2)
 
