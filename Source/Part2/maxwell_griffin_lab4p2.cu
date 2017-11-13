@@ -96,12 +96,12 @@ void DisplayParameters(
    char *serialOutputFile,
    char *cudaOutputFile,
    int imageHeight,
-   int imageWidth
+   int imageWidth)
 {
    printf("********************************************************************************\n");
    printf("lab4p2: serial vs. CUDA Sobel edge detection.\n");
    printf("\n");
-   printf("Input image: %s \t(Height: %d pixels, width: %d pixels)\n", inputFile, );
+   printf("Input image: %s \t(Height: %d pixels, width: %d pixels)\n", inputFile, imageHeight, imageWidth);
    printf("Serial output image: \t%s\n", serialOutputFile);
    printf("CUDA output image: \t%s\n", cudaOutputFile);
    printf("\n");

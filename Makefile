@@ -1,6 +1,6 @@
 # Compiler
 CUDA := nvcc
-CUDAFLAGS := -O -Wno-deprecated-gpu-targets
+CUDAFLAGS := -arch=sm_60 -O -Wno-deprecated-gpu-targets
 
 # Paths
 BUILD_DIR := Build
