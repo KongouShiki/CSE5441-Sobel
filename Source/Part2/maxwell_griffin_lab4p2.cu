@@ -14,7 +14,9 @@ extern "C"
 #include "Sobel.h"
 }
 
-#define PERCENT_BLACK_THRESHOLD 75
+#define PIXEL_BLACK (0)
+#define PIXEL_WHITE (255)
+#define PERCENT_BLACK_THRESHOLD (75)
 
 #define CUDA_GRIDS (1)
 #define CUDA_BLOCKS_PER_GRID (1)
@@ -96,11 +98,46 @@ void DisplayResults(
  *
  * @param input -- input pixel buffer
  * @param output -- output pixel buffer
+ * @param height -- height of pixel image
+ * @param width -- width of pixel image
  * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
-int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output)
+int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
-   return 100;
+   int blackPixelCount = 0;
+   for(int brightnessThreshold = 0; blackPixelCount < (PERCENT_BLACK_THRESHOLD * height * width); brightnessThreshold++)
+   {
+      blackPixelCount = 0;
+
+      // Initialize stencil to sit centered at input[1][1]
+      Stencil_t pixel = {
+         .top =    &input[LINEARIZE(0, 0, width)];
+         .middle = &input[LINEARIZE(1, 0, width)];
+         .bottom = &input[LINEARIZE(2, 0, width)];
+      };
+
+      // Skip first and last row (to avoid top/bottom boundaries)
+      for(int row = 1; row < (height-1); row++)
+      {
+         // Skip first and last column (to avoid left/right boundaries)
+         for(int col = 1; col < (width-1); col++)
+         {
+            if(Sobel_Magnitude(&pixel) > brightnessThreshold)
+            {
+               output[LINEARIZE(row, col, width)] = PIXEL_WHITE;
+            }
+            else
+            {
+               output[LINEARIZE(row, col, width)] = PIXEL_BLACK;
+               blackPixelCount++;
+            }
+
+            Stencil_MoveRight(&pixel);
+         }
+
+         Stencil_MoveToNextRow(&pixel);
+      }
+   }
 }
 
 /*
@@ -110,9 +147,11 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output)
  *
  * @param input -- input pixel buffer
  * @param output -- output pixel buffer
+ * @param height -- height of pixel image
+ * @param width -- width of pixel image
  * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
-int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output)
+int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
    return 20;
 }

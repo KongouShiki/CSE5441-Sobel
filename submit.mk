@@ -17,6 +17,7 @@ TARGET_EXECUTABLES := \
 # Objects
 OBJ_PART2 := \
 	Sobel.o \
+	Stencil.o \
 
 LIB_OBJ_PART2 := \
 	nvcc60_bmpReader.o \
