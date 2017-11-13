@@ -1,6 +1,6 @@
 # Compilers & flags
 CUDA := nvcc
-CUDAFLAGS := -O -Wno-deprecated-gpu-targets
+CUDAFLAGS := -arch=sm_60 -O -Wno-deprecated-gpu-targets
 
 # Paths
 BUILD_DIR := Build
@@ -14,14 +14,25 @@ TARGET_EXECUTABLES := \
 	$(TARGET_PART1) \
 	$(TARGET_PART2) \
 
+# Objects
+OBJ_PART2 := \
+	Sobel.o \
+
+LIB_OBJ_PART2 := \
+	nvcc60_bmpReader.o \
+
+
 all: $(TARGET_EXECUTABLES)
 
 $(TARGET_PART1):
 	$(CUDA) -o $@ maxwell_griffin_$@.cu $(CUDAFLAGS)
 
-$(TARGET_PART2):
-	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CUDA) -o $@ maxwell_griffin_$@.o bmpReader.o $^ $(CUDAFLAGS)
+$(TARGET_PART2): $(OBJ_PART2)
+	$(CUDA) -dc -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.o $(OBJ_PART2) $(LIB_OBJ_PART2) $^ $(CUDAFLAGS)
+
+%.o: %.c
+	$(CUDA) -x c -c -o $@ $< $(CUDAFLAGS)
 
 .PHONY: clean
 clean:
