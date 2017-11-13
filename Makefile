@@ -13,8 +13,8 @@ TARGET_PART1 := lab4p1
 TARGET_PART2 := lab4p2
 
 TARGET_EXECUTABLES := \
-	$(TARGET_PART1)
-	$(TARGET_PART2)
+	$(TARGET_PART1) \
+	$(TARGET_PART2) \
 
 # File lists for Part 2
 SRCS_PART2 := $(shell find $(SRC_PART2_DIR) -name *.c)
