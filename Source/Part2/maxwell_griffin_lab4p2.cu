@@ -16,7 +16,7 @@ extern "C"
 
 #define PIXEL_BLACK (0)
 #define PIXEL_WHITE (255)
-#define PERCENT_BLACK_THRESHOLD (75)
+#define PERCENT_BLACK_THRESHOLD (0.75)
 
 #define CUDA_GRIDS (1)
 #define CUDA_BLOCKS_PER_GRID (1)
@@ -105,7 +105,7 @@ void DisplayResults(
 int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
    int blackPixelCount = 0;
-   for(int brightnessThreshold = 0; blackPixelCount < (PERCENT_BLACK_THRESHOLD * height * width); brightnessThreshold++)
+   for(int brightnessThreshold = 0; blackPixelCount < (height * width * 3 / 4); brightnessThreshold++)
    {
       blackPixelCount = 0;
 
