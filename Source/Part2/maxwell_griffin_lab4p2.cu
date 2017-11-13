@@ -4,7 +4,7 @@
  *       serial algorithm, and once by a massively parallel CUDA algorithm.
  */
 
-#include <stdlib>
+#include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
 #include <math.h>
