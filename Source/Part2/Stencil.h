@@ -19,7 +19,7 @@ typedef struct
  * @precondition -- stencil right is not at the rightmost column of the matrix
  * @param stencil -- the stencil
  */
-void Stencil_MoveRight(Stencil_t &stencil);
+void Stencil_MoveRight(Stencil_t *stencil);
 
 /*
  * Move a stencil at the rightmost column of a matrix to the beginning of
@@ -29,6 +29,6 @@ void Stencil_MoveRight(Stencil_t &stencil);
  * @precondition -- stencil bottom is not at the last row of the matrix
  * @param stencil -- the stencil
  */
-void Stencil_MoveToNextRow(Stencil_t &stencil);
+void Stencil_MoveToNextRow(Stencil_t *stencil);
 
  #endif
