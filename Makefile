@@ -18,7 +18,7 @@ TARGET_EXECUTABLES := \
 
 # File lists for Part 2
 SRCS_PART2 := $(shell find $(SRC_PART2_DIR) -name *.c)
-OBJ_PART2 := $(SRCS_PART2:%=$(BUILD_DIR)$(SRC_PART2_DIR)/%.o)
+OBJ_PART2 := $(SRCS_PART2:%=$(BUILD_DIR)/$(SRC_PART2_DIR)/%.o)
 LIB_OBJ_PART2 := $(SRC_PART2_DIR)/nvcc60_bmpReader.o
 
 
