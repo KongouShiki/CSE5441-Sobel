@@ -8,9 +8,9 @@
 
 typedef struct
 {
-   double *top;
-   double *middle;
-   double *bottom;
+   unsigned char *top;
+   unsigned char *middle;
+   unsigned char *bottom;
 } Stencil_t;
 
 /*
