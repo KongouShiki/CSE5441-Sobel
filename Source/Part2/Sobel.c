@@ -33,5 +33,5 @@ double Sobel_Magnitude(Stencil_t *stencil)
          +  (Gy[2][i] * stencil->bottom[i]);
    }
 
-   return sqrt(pow(sumGx  2) + pow(sumGy, 2));
+   return sqrt(pow(sumGx, 2) + pow(sumGy, 2));
 }
