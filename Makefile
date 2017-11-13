@@ -35,7 +35,7 @@ $(TARGET_PART2): $(OBJ_PART2)
 # c source
 $(BUILD_DIR)/%.c.o: %.c
 	mkdir -p $(dir $@)
-	$(CUDA) $(CUDAFLAGS) -x c -c $< -o $@
+	$(CUDA) $(CUDAFLAGS) -x c -std=c99 -c $< -o $@
 
 
 .PHONY: clean package test
