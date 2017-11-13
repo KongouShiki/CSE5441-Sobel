@@ -186,12 +186,12 @@ int main(int argc, char* argv[])
 
    printf("Performing serial Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
-   int serialConvergenceThreshold = SerialSobelEdgeDetection(inputImage, serialOutputImage);
+   int serialConvergenceThreshold = SerialSobelEdgeDetection(inputImage, serialOutputImage, get_image_width(), get_image_height());
    clock_gettime(CLOCK_REALTIME, &rtcSerialEnd);
 
    printf("Performing CUDA parallel Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcParallelStart);
-   int parallelConvergenceThreshold = ParallelSobelEdgeDetection(inputImage, cudaOutputImage);
+   int parallelConvergenceThreshold = ParallelSobelEdgeDetection(inputImage, cudaOutputImage, get_image_width(), get_image_height());
    clock_gettime(CLOCK_REALTIME, &rtcParallelEnd);
 
    DisplayResults(serialConvergenceThreshold, parallelConvergenceThreshold);
