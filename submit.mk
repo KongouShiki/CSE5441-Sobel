@@ -29,7 +29,7 @@ $(TARGET_PART1):
 
 $(TARGET_PART2): $(OBJ_PART2)
 	$(CUDA) -dc -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CUDA) -o $@ maxwell_griffin_$@.o $(OBJ_PART2) $(LIB_OBJ_PART2) $^ $(CUDAFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.o $(LIB_OBJ_PART2) $^ $(CUDAFLAGS)
 
 %.o: %.c
 	$(CUDA) -x c -c -o $@ $< $(CUDAFLAGS)
