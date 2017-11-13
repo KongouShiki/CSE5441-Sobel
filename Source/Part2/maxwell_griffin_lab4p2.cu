@@ -195,7 +195,7 @@ int main(int argc, char* argv[])
    uint8_t *serialOutputImage = (uint8_t *)malloc(get_num_pixel());
    uint8_t *cudaOutputImage = (uint8_t *)malloc(get_num_pixel());
 
-   DisplayParameters(argv[1], argv[2], argv[3], 11, 12);
+   DisplayParameters(argv[1], argv[2], argv[3], get_image_height(), get_image_width());
 
    printf("Performing serial Sobel edge detection.\n");
    clock_gettime(CLOCK_REALTIME, &rtcSerialStart);
@@ -209,15 +209,7 @@ int main(int argc, char* argv[])
 
    DisplayResults(serialConvergenceThreshold, parallelConvergenceThreshold);
 
-   // Write output image buffers
+   // Write output image buffers. Closes files and frees buffers.
    write_bmp_file(serialOutputFile, serialOutputImage);
    write_bmp_file(cudaOutputFile, cudaOutputImage);
-
-   // Close files
-   fclose(serialOutputFile);
-   fclose(cudaOutputFile);
-
-   // Free allocated memory
-   free(serialOutputImage);
-   free(cudaOutputImage);
 }
