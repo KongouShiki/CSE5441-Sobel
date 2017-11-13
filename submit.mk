@@ -33,7 +33,7 @@ $(TARGET_PART2): $(OBJ_PART2)
 	$(CUDA) -o $@ maxwell_griffin_$@.o $(LIB_OBJ_PART2) $^ $(CUDAFLAGS)
 
 %.o: %.c
-	$(CUDA) -x c -std=c99 -c -o $@ $< $(CUDAFLAGS)
+	$(CUDA) -x c -c -o $@ $< $(CUDAFLAGS)
 
 .PHONY: clean
 clean:
