@@ -4,7 +4,9 @@
  *       serial algorithm, and once by a massively parallel CUDA algorithm.
  */
 
+#include <stdlib>
 #include <stdio.h>
+#include <time.h>
 #include <math.h>
 #include "Stencil.h"
 #include "read_bmp.h"
