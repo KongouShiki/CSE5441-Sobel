@@ -1,8 +1,6 @@
 # Compilers & flags
-CC := gcc
 CUDA := nvcc
-CFLAGS := -O3
-CUDAFLAGS := -O
+CUDAFLAGS := -arch=sm_60 -O -Wno-deprecated-gpu-targets
 
 # Paths
 BUILD_DIR := Build
@@ -13,29 +11,31 @@ TARGET_PART1 := lab4p1
 TARGET_PART2 := lab4p2
 
 TARGET_EXECUTABLES := \
-	$(TARGET_PART1)
+	$(TARGET_PART1) \
+	$(TARGET_PART2) \
 
 # Objects
-OBJ_PART1 := \
-
-
 OBJ_PART2 := \
-	bmpReader.o
+	Sobel.o \
+	Stencil.o \
 
+LIB_OBJ_PART2 := \
+	nvcc60_bmpReader.o \
 
-%.o: %.c
-	$(CC) -c -o $@ $< $(CFLAGS)
 
 all: $(TARGET_EXECUTABLES)
 
-$(TARGET_PART1): $(OBJ_PART1)
+$(TARGET_PART1):
 	$(CUDA) -o $@ maxwell_griffin_$@.cu $(CUDAFLAGS)
 
 $(TARGET_PART2): $(OBJ_PART2)
-	$(CUDA) -c -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CUDA) -dc -o maxwell_griffin_$@.o maxwell_griffin_$@.cu $(CUDAFLAGS)
+	$(CUDA) -o $@ maxwell_griffin_$@.o $(LIB_OBJ_PART2) $^ $(CUDAFLAGS)
+
+%.o: %.c
+	$(CUDA) -x c -c -o $@ $< $(CUDAFLAGS)
 
 .PHONY: clean
 clean:
 	@echo Cleaning build files...
-	@rm -f *.o $(TARGET_EXECUTABLES)
+	@rm -f $(TARGET_EXECUTABLES)

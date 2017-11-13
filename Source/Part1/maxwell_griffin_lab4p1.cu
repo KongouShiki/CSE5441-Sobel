@@ -210,6 +210,8 @@ void DisplayResults(double *serial, double *parallel, int dim)
       (LINEARIZE(rtcParallelEnd.tv_sec, rtcParallelEnd.tv_nsec, NS_PER_SEC)
       - LINEARIZE(rtcParallelStart.tv_sec, rtcParallelStart.tv_nsec, NS_PER_SEC))
       / ((double)NS_PER_SEC));
+
+   printf("********************************************************************************\n");
 }
 
 /*
