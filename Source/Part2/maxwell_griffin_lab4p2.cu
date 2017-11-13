@@ -111,9 +111,9 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
 
       // Initialize stencil to sit centered at input[1][1]
       Stencil_t pixel = {
-         .top =    &input[LINEARIZE(0, 0, width)];
-         .middle = &input[LINEARIZE(1, 0, width)];
-         .bottom = &input[LINEARIZE(2, 0, width)];
+         .top =    &input[LINEARIZE(0, 0, width)],
+         .middle = &input[LINEARIZE(1, 0, width)],
+         .bottom = &input[LINEARIZE(2, 0, width)]
       };
 
       // Skip first and last row (to avoid top/bottom boundaries)
