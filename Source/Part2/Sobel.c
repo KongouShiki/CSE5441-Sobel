@@ -21,7 +21,8 @@ double Sobel_Magnitude(Stencil_t *stencil)
 {
    double sumGx = 0, sumGy = 0;
 
-   for(int i = 0; i < 3; i++)
+   int i;
+   for(i = 0; i < 3; i++)
    {
       sumGx += (Gx[0][i] * stencil->top[i])
          +  (Gx[1][i] * stencil->middle[i])
