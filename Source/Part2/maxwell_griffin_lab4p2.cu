@@ -100,12 +100,12 @@ void DisplayResults(
  * @param output -- output pixel buffer
  * @param height -- height of pixel image
  * @param width -- width of pixel image
- * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
+ * @return -- gradient threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
 int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
-   int blackPixelCount = 0;
-   for(int brightnessThreshold = 0; blackPixelCount < (height * width * 3 / 4); brightnessThreshold++)
+   int gradientThreshold, blackPixelCount = 0;
+   for(gradientThreshold = 0; blackPixelCount < (height * width * 3 / 4); gradientThreshold++)
    {
       blackPixelCount = 0;
 
@@ -122,7 +122,7 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
          // Skip first and last column (to avoid left/right boundaries)
          for(int col = 1; col < (width-1); col++)
          {
-            if(Sobel_Magnitude(&pixel) > brightnessThreshold)
+            if(Sobel_Magnitude(&pixel) > gradientThreshold)
             {
                output[LINEARIZE(row, col, width)] = PIXEL_WHITE;
             }
@@ -138,6 +138,8 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
          Stencil_MoveToNextRow(&pixel);
       }
    }
+
+   return gradientThreshold;
 }
 
 /*
