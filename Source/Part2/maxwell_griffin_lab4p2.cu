@@ -115,10 +115,10 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
       };
 
       // Skip first and last row (to avoid top/bottom boundaries)
-      for(int row = 1; row < (height-1); row++)
+      for(int row = 1; row < (height - 1); row++)
       {
          // Skip first and last column (to avoid left/right boundaries)
-         for(int col = 1; col < (width-1); col++)
+         for(int col = 1; col < (width - 1); col++)
          {
             if(Sobel_Magnitude(&pixel) > gradientThreshold)
             {
@@ -140,31 +140,45 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
    return gradientThreshold;
 }
 
-
 /*
- * Massively parallel CUDA kernel function that
+ * Massively parallel CUDA kernel function that performs a Sobel edge detection
+ * on a group of pixels.
  *
  */
 __global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width, int gradientThreshold)
 {
-   // Calculate the row/col in the actual image that this thread's stencil's top left corner is on
-   int row = (LINEARIZE(blockIdx.x, threadIdx.x, blockDim.x) / (width - 2));
-   int col = (LINEARIZE(blockIdx.x, threadIdx.x, blockDim.x) % (width - 2));
+   int row = 0;
+   for(int i = 0; row < (height - 1); i++)
+      // Let the blockIdx increment beyond its dimension for cyclic distribution of the test pixels
+      int blockRow = (i * blockDim.x) + blockIdx.x;
 
-   Stencil_t pixel = {
-      .top = &input[LINEARIZE(row, col, width)],
-      .middle = &input[LINEARIZE(row + 1, col, width)],
-      .bottom = &input[LINEARIZE(row + 2, col, width)]
-   };
+      // Calculate the row/col in the image buffer that this thread's stencil's center is on
+      row = (LINEARIZE(blockRow, threadIdx.x, blockDim.x) / (width - 2)) + 1;
+      int col = (LINEARIZE(blockRow, threadIdx.x, blockDim.x) % (width - 2)) + 1;
 
-   // for (something something)
-   if(Sobel_Magnitude(&pixel) > gradientThreshold)
-   {
-      output[LINEARIZE(row + 1, col + 1, width)] = PIXEL_WHITE;
-   }
-   else
-   {
-      output[LINEARIZE(row + 1, col + 1, width)] = PIXEL_BLACK;
+      // Calculate Sobel magnitude of gradient directly, instead of using Sobel_Magnitude utility
+      double Gx = (Sobel_Gx[0][0] * input[LINEARIZE(row - 1, col - 1, width)])
+         + (Sobel_Gx[0][2] * input[LINEARIZE(row - 1, col + 1, width)])
+         + (Sobel_Gx[1][0] * input[LINEARIZE(row, col - 1, width)])
+         + (Sobel_Gx[1][2] * input[LINEARIZE(row, col + 1, width)])
+         + (Sobel_Gx[2][0] * input[LINEARIZE(row + 1, col - 1, width)])
+         + (Sobel_Gx[2][2] * input[LINEARIZE(row + 1, col + 1, width)]);
+
+      double Gy = (Sobel_Gy[0][0] * input[LINEARIZE(row - 1, col - 1, width)])
+         + (Sobel_Gy[0][1] * input[LINEARIZE(row - 1, col, width)])
+         + (Sobel_Gy[0][2] * input[LINEARIZE(row - 1, col + 1, width)])
+         + (Sobel_Gy[2][0] * input[LINEARIZE(row + 1, col - 1, width)])
+         + (Sobel_Gy[2][1] * input[LINEARIZE(row + 1, col, width)])
+         + (Sobel_Gy[2][2] * input[LINEARIZE(row + 1, col + 1, width)]);
+
+      if(((Gx * Gx) + (Gy * Gy)) > (gradientThreshold * gradientThreshold))
+      {
+         output[LINEARIZE(row, col, width)] = PIXEL_WHITE;
+      }
+      else
+      {
+         output[LINEARIZE(row, col, width)] = PIXEL_BLACK;
+      }
    }
 }
 
@@ -177,13 +191,12 @@ __global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int heig
  * @param output -- output pixel buffer
  * @param height -- height of pixel image
  * @param width -- width of pixel image
- * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
+ * @return -- gradient threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
 __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
-   int blackPixelCount;
-   int numBlocks; // = ?
-   int threadsPerBlock;// = ? (width / CUDA_THREADS_PER_WARP) + 1;
+   int numBlocks = 32;  // = ?
+   int threadsPerBlock = 32;  // = ?
    size_t imageMemSize =  height * width * sizeof(uint8_t);
    uint8_t *deviceInputImage, *deviceOutputImage;
 
@@ -197,7 +210,9 @@ __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int hei
    dim3 dimGrid(numBlocks);
    dim3 dimBlock(threadsPerBlock);
 
-   // BEGIN CONVERGENCE LOOP
+   int gradientThreshold, blackPixelCount = 0;
+   for(gradientThreshold = 0; blackPixelCount < (height * width * 3 / 4); gradientThreshold++)
+   {
       // Launch Kernel
       CudaSobelEdgeDetection<<<dimGrid, dimBlock>>>(deviceInputMatrix, deviceResultMatrix, height, width);
 
@@ -206,15 +221,16 @@ __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int hei
 
       // Count number of black pixels
       blackPixelCount = 0;
-      for(int row = 1; row < (height-1); row++)
+      for(int row = 1; row < (height - 1); row++)
       {
-         for(int col = 1; col < (width-1); col++)
+         for(int col = 1; col < (width - 1); col++)
          {
             if(output[LINEARIZE(row, col, width)] == PIXEL_BLACK)
             {
                blackPixelCount++;
             }
       }
+   }
 }
 
 /*
