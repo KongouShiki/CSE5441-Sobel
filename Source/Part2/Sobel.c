@@ -5,13 +5,13 @@
 #include <math.h>
 #include "Sobel.h"
 
-const int Sobel_Gx[3][3] = {
+static int Sobel_Gx[3][3] = {
    { -1, 0, 1 },
    { -2, 0, 2 },
    { -1, 0, 1 }
 };
 
-const int Sobel_Gy[3][3] = {
+static int Sobel_Gy[3][3] = {
    {  1,  2,  1 },
    {  0,  0,  0 },
    { -1, -2, -1 }
