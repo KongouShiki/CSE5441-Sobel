@@ -165,7 +165,7 @@ __global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int heig
    for(int i = 0; row < (height - 1); i++)
    {
       // Let the blockIdx increment beyond its dimension for cyclic distribution of the test pixels
-      int blockRow = (i * blockDim.x) + blockIdx.x;
+      int blockRow = (i * gridDim.x) + blockIdx.x;
 
       // Calculate the row/col in the image buffer that this thread's stencil's center is on
       row = (LINEARIZE(blockRow, threadIdx.x, blockDim.x) / (width - 2)) + 1;
