@@ -217,7 +217,7 @@ __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int hei
    for(gradientThreshold = 0; blackPixelCount < (height * width * 3 / 4); gradientThreshold++)
    {
       // Launch Kernel
-      CudaSobelEdgeDetection<<<dimGrid, dimBlock>>>(deviceInputMatrix, deviceResultMatrix, height, width);
+      CudaSobelEdgeDetection<<<dimGrid, dimBlock>>>(deviceInputImage, deviceResultImage, height, width, gradientThreshold);
 
       // Copy device results array back to host
       cudaMemcpy(output, deviceOutputImage, imageMemSize, cudaMemcpyDeviceToHost);
