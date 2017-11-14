@@ -20,7 +20,7 @@ extern "C"
 
 #define CUDA_GRIDS (1)
 #define CUDA_BLOCKS_PER_GRID (32)
-#define CUDA_THREADS_PER_BLOCK (32)
+#define CUDA_THREADS_PER_BLOCK (128)
 
 #define MS_PER_SEC (1000)
 #define NS_PER_MS (1000 * 1000)
@@ -94,7 +94,7 @@ void DisplayResults(
    printf("Convergence Threshold: %d\n", serialConvergenceThreshold);
    printf("\n");
 
-   printf("Time taken for serial Sobel edge detection: %lf\n",
+   printf("Time taken for CUDA Sobel edge detection: %lf\n",
       (LINEARIZE(rtcParallelEnd.tv_sec, rtcParallelEnd.tv_nsec, NS_PER_SEC)
       - LINEARIZE(rtcParallelStart.tv_sec, rtcParallelStart.tv_nsec, NS_PER_SEC))
       / ((double)NS_PER_SEC));
