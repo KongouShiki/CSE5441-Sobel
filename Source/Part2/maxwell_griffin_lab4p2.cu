@@ -18,7 +18,9 @@ extern "C"
 #define PIXEL_WHITE (255)
 #define PERCENT_BLACK_THRESHOLD (0.75)
 
-#define CUDA_THREADS_PER_WARP (32)
+#define CUDA_GRIDS (1)
+#define CUDA_BLOCKS_PER_GRID (32)
+#define CUDA_THREADS_PER_BLOCK (32)
 
 #define MS_PER_SEC (1000)
 #define NS_PER_MS (1000 * 1000)
@@ -195,8 +197,8 @@ __global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int heig
  */
 __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
-   int numBlocks = 32;  // = ?
-   int threadsPerBlock = 32;  // = ?
+   int numBlocks = CUDA_BLOCKS_PER_GRID;  // = ?
+   int threadsPerBlock = CUDA_THREADS_PER_BLOCK;  // = ?
    size_t imageMemSize =  height * width * sizeof(uint8_t);
    uint8_t *deviceInputImage, *deviceOutputImage;
 
@@ -229,8 +231,11 @@ __host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int hei
             {
                blackPixelCount++;
             }
+         }
       }
    }
+
+   return gradientThreshold;
 }
 
 /*
