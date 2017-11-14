@@ -79,7 +79,7 @@ void SerialMultiplyMatrixByTranspose(
  * @param resultMatrix -- device memory to store the result
  * @param dim -- the size of each row and column
  */
-__global__ void cudaMultiplyMatrixByTranspose(
+__global__ void CudaMultiplyMatrixByTranspose(
    double *inputMatrix,
    double *resultMatrix,
    int dim)
@@ -109,7 +109,7 @@ __global__ void cudaMultiplyMatrixByTranspose(
  * @param resultMatrix -- stores the result
  * @param dim -- the size of each row and column
  */
-void ParallelMultiplyMatrixByTranspose(
+__host__ void ParallelMultiplyMatrixByTranspose(
    double *inputMatrix,
    double *resultMatrix,
    int dim)
@@ -129,7 +129,7 @@ void ParallelMultiplyMatrixByTranspose(
    // Launch Kernel
    dim3 dimGrid(numBlocks);
    dim3 dimBlock(threadsPerBlock);
-   cudaMultiplyMatrixByTranspose<<<dimGrid, dimBlock>>>(deviceInputMatrix, deviceResultMatrix, dim);
+   CudaMultiplyMatrixByTranspose<<<dimGrid, dimBlock>>>(deviceInputMatrix, deviceResultMatrix, dim);
 
    // Copy device results array back to host
    cudaMemcpy(resultMatrix, deviceResultMatrix, matrixMemSize, cudaMemcpyDeviceToHost);

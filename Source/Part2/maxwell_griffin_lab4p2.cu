@@ -18,9 +18,7 @@ extern "C"
 #define PIXEL_WHITE (255)
 #define PERCENT_BLACK_THRESHOLD (0.75)
 
-#define CUDA_GRIDS (1)
-#define CUDA_BLOCKS_PER_GRID (1)
-#define CUDA_THREADS_PER_BLOCK (1)
+#define CUDA_THREADS_PER_WARP (32)
 
 #define MS_PER_SEC (1000)
 #define NS_PER_MS (1000 * 1000)
@@ -142,6 +140,34 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
    return gradientThreshold;
 }
 
+
+/*
+ * Massively parallel CUDA kernel function that
+ *
+ */
+__global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width, int gradientThreshold)
+{
+   // Calculate the row/col in the actual image that this thread's stencil's top left corner is on
+   int row = (LINEARIZE(blockIdx.x, threadIdx.x, blockDim.x) / (width - 2));
+   int col = (LINEARIZE(blockIdx.x, threadIdx.x, blockDim.x) % (width - 2));
+
+   Stencil_t pixel = {
+      .top = &input[LINEARIZE(row, col, width)],
+      .middle = &input[LINEARIZE(row + 1, col, width)],
+      .bottom = &input[LINEARIZE(row + 2, col, width)]
+   };
+
+   // for (something something)
+   if(Sobel_Magnitude(&pixel) > gradientThreshold)
+   {
+      output[LINEARIZE(row + 1, col + 1, width)] = PIXEL_WHITE;
+   }
+   else
+   {
+      output[LINEARIZE(row + 1, col + 1, width)] = PIXEL_BLACK;
+   }
+}
+
 /*
  * Parallel algorithm to keep perform a Sobel edge detection on an input pixel
  * buffer at different brightness thresholds until a certain percentage of
@@ -153,9 +179,42 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
  * @param width -- width of pixel image
  * @return -- brightness threshold at which PERCENT_BLACK_THRESHOLD pixels are black
  */
-int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
+__host__ int ParallelSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width)
 {
-   return 20;
+   int blackPixelCount;
+   int numBlocks; // = ?
+   int threadsPerBlock;// = ? (width / CUDA_THREADS_PER_WARP) + 1;
+   size_t imageMemSize =  height * width * sizeof(uint8_t);
+   uint8_t *deviceInputImage, *deviceOutputImage;
+
+   // Allocate device memory
+   cudaMalloc((void **)&deviceInputImage, imageMemSize);
+   cudaMalloc((void **)&deviceOutputImage, imageMemSize);
+
+   // Copy host input array to device
+   cudaMemcpy(deviceInputImage, input, imageMemSize, cudaMemcpyHostToDevice);
+
+   dim3 dimGrid(numBlocks);
+   dim3 dimBlock(threadsPerBlock);
+
+   // BEGIN CONVERGENCE LOOP
+      // Launch Kernel
+      CudaSobelEdgeDetection<<<dimGrid, dimBlock>>>(deviceInputMatrix, deviceResultMatrix, height, width);
+
+      // Copy device results array back to host
+      cudaMemcpy(output, deviceOutputImage, imageMemSize, cudaMemcpyDeviceToHost);
+
+      // Count number of black pixels
+      blackPixelCount = 0;
+      for(int row = 1; row < (height-1); row++)
+      {
+         for(int col = 1; col < (width-1); col++)
+         {
+            if(output[LINEARIZE(row, col, width)] == PIXEL_BLACK)
+            {
+               blackPixelCount++;
+            }
+      }
 }
 
 /*
