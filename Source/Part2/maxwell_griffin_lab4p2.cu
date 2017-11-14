@@ -34,13 +34,13 @@ static struct timespec rtcSerialEnd;
 static struct timespec rtcParallelStart;
 static struct timespec rtcParallelEnd;
 
-static int Sobel_Gx[3][3] = {
+__device__ int Sobel_Gx[3][3] = {
    { -1, 0, 1 },
    { -2, 0, 2 },
    { -1, 0, 1 }
 };
 
-static int Sobel_Gy[3][3] = {
+__device__ int Sobel_Gy[3][3] = {
    {  1,  2,  1 },
    {  0,  0,  0 },
    { -1, -2, -1 }
