@@ -1,0 +1,99 @@
+-bash-4.2$ ./lab4p1
+********************************************************************************
+lab4p1: serial vs. CUDA matrix multiplication.
+
+Matrix dimensions: 1024x1024
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 1024 blocks
+        |-- with 1024 threads per block
+
+Performing serial matrix multiplication.
+Performing parallel matrix multiplication.
+Checking that the two resulting matrices are equivalent.
+The two resulting matrices are equivalent!
+
+Timing results:
+|-- The serial algorithm took    8.5806 seconds
+|-- The parallel algorithm took    0.3492 seconds
+********************************************************************************
+
+********************************************************************************
+lab4p1: serial vs. CUDA matrix multiplication.
+
+Matrix dimensions: 1024x1024
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 1024 blocks
+        |-- with 1024 threads per block
+
+Performing serial matrix multiplication.
+Performing parallel matrix multiplication.
+Checking that the two resulting matrices are equivalent.
+The two resulting matrices are equivalent!
+
+Timing results:
+|-- The serial algorithm took    8.5715 seconds
+|-- The parallel algorithm took    0.2839 seconds
+********************************************************************************
+
+-bash-4.2$ ./lab4p1 
+********************************************************************************
+lab4p1: serial vs. CUDA matrix multiplication.
+
+Matrix dimensions: 1024x1024
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 1024 blocks
+        |-- with 1024 threads per block
+
+Performing serial matrix multiplication.
+Performing parallel matrix multiplication.
+Checking that the two resulting matrices are equivalent.
+The two resulting matrices are equivalent!
+
+Timing results:
+|-- The serial algorithm took    8.6382 seconds
+|-- The parallel algorithm took    0.2971 seconds
+********************************************************************************
+
+-bash-4.2$ ./lab4p1 
+********************************************************************************
+lab4p1: serial vs. CUDA matrix multiplication.
+
+Matrix dimensions: 1024x1024
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 1024 blocks
+        |-- with 1024 threads per block
+
+Performing serial matrix multiplication.
+Performing parallel matrix multiplication.
+Checking that the two resulting matrices are equivalent.
+The two resulting matrices are equivalent!
+
+Timing results:
+|-- The serial algorithm took    8.5818 seconds
+|-- The parallel algorithm took    0.3430 seconds
+********************************************************************************
+
+
+-bash-4.2$ ./lab4p1 
+********************************************************************************
+lab4p1: serial vs. CUDA matrix multiplication.
+
+Matrix dimensions: 1024x1024
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 1024 blocks
+        |-- with 1024 threads per block
+
+Performing serial matrix multiplication.
+Performing parallel matrix multiplication.
+Checking that the two resulting matrices are equivalent.
+The two resulting matrices are equivalent!
+
+Timing results:
+|-- The serial algorithm took    8.6010 seconds
+|-- The parallel algorithm took    0.2944 seconds
+********************************************************************************
