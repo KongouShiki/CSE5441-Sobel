@@ -55,5 +55,6 @@ package:
 	@cp $(SRC_PART2_DIR)/*.h cse5441_lab4
 	@cp $(SRC_PART2_DIR)/*.o cse5441_lab4
 	@cp coins.bmp cse5441_lab4
+	@cp larger.bmp cse5441_lab4
 	@cp submit.mk cse5441_lab4
 	@mv cse5441_lab4/submit.mk cse5441_lab4/Makefile
