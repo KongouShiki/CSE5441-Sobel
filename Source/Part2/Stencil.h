@@ -22,10 +22,10 @@ typedef struct
 void Stencil_MoveRight(Stencil_t *stencil);
 
 /*
- * Move a stencil at the rightmost column of a matrix to the beginning of
+ * Move a stencil just past the rightmost column of a matrix to the beginning of
  * the next row.
  *
- * @precondition -- stencil right is at the rightmost column of the matrix
+ * @precondition -- stencil right is just past the rightmost column of the matrix
  * @precondition -- stencil bottom is not at the last row of the matrix
  * @param stencil -- the stencil
  */
