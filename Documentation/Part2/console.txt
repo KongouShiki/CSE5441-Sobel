@@ -1,0 +1,144 @@
+-bash-4.2$ ./lab4p2 coins.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=246 Width=300
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: coins.bmp 	(Height: 246 pixels, width: 300 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 0.236935
+Convergence Threshold: 51
+
+Time taken for CUDA Sobel edge detection: 0.278830
+Convergence Threshold: 51
+********************************************************************************
+
+-bash-4.2$ ./lab4p2 larger.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=1200 Width=1920
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: larger.bmp 	(Height: 1200 pixels, width: 1920 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 3.129137
+Convergence Threshold: 27
+
+Time taken for CUDA Sobel edge detection: 0.499651
+Convergence Threshold: 27
+********************************************************************************
+
+-bash-4.2$ ./lab4p2 larger.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=1200 Width=1920
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: larger.bmp 	(Height: 1200 pixels, width: 1920 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 3.119358
+Convergence Threshold: 27
+
+Time taken for CUDA Sobel edge detection: 0.498373
+Convergence Threshold: 27
+********************************************************************************
+
+-bash-4.2$ ./lab4p2 larger.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=1200 Width=1920
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: larger.bmp 	(Height: 1200 pixels, width: 1920 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 3.128123
+Convergence Threshold: 27
+
+Time taken for CUDA Sobel edge detection: 0.499605
+Convergence Threshold: 27
+********************************************************************************
+
+-bash-4.2$ ./lab4p2 larger.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=1200 Width=1920
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: larger.bmp 	(Height: 1200 pixels, width: 1920 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 3.114522
+Convergence Threshold: 27
+
+Time taken for CUDA Sobel edge detection: 0.500655
+Convergence Threshold: 27
+********************************************************************************
+
+-bash-4.2$ ./lab4p2 larger.bmp s.bmp p.bmp 
+Image Info :: 
+	 Height=1200 Width=1920
+********************************************************************************
+lab4p2: serial vs. CUDA Sobel edge detection.
+
+Input image: larger.bmp 	(Height: 1200 pixels, width: 1920 pixels)
+Serial output image: 	s.bmp
+CUDA output image: 	p.bmp
+
+CUDA compute structure:
+|-- with 1 grid
+    |-- with 32 blocks
+        |-- with 128 threads per block
+
+Performing serial Sobel edge detection.
+Performing CUDA parallel Sobel edge detection.
+Time taken for serial Sobel edge detection: 3.155403
+Convergence Threshold: 27
+
+Time taken for CUDA Sobel edge detection: 0.497489
+Convergence Threshold: 27
+********************************************************************************
+
