@@ -158,6 +158,11 @@ int SerialSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int wi
  * Massively parallel CUDA kernel function that performs a Sobel edge detection
  * on a group of pixels.
  *
+ * @param input -- device input pixel buffer
+ * @param output -- device output pixel buffer
+ * @param height -- height of pixel image
+ * @param width -- width of pixel image
+ * @param gradientThreshold -- threshold to turn pixels black or white
  */
 __global__ void CudaSobelEdgeDetection(uint8_t *input, uint8_t *output, int height, int width, int gradientThreshold)
 {
